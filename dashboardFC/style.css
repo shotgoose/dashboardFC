@@ -1,0 +1,19 @@
+body {
+    background-color: black;
+    color: white;
+    width: 1920px;
+    height: 720px;
+}
+
+#dashboard {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+.gauge {
+    width: 33.33%;
+    height: 50%;
+    padding-top: 15%;
+    text-align: center;
+}
