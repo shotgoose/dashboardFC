@@ -11,4 +11,4 @@ const data = {
     leftTurnSignal: false,
     hazards: false,
     highBeam: false,
-}
+} 
