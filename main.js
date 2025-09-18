@@ -1,25 +1,50 @@
-const data = {
+const car = {
     rpm: 0,
+    rpm_ratio: 0,
     mph: 0,
-    coolantTemp: 0,
-    oilPressure: 0,
+    coolant_temp: 0,
+    oil_pressure: 0,
     voltage: 0,
-    fuelLevel: 0,
-    outsideTemp: 0,  
+    fuel_level: 0,
+    outside_temp: 0,  
     illumination: false,
-    rightTurnSignal: false,
-    leftTurnSignal: false,
+    right_turn_signal: false,
+    left_turn_signal: false,
     hazards: false,
-    highBeam: false,
-    maxrpm: 7000,
+    high_beam: false,
+    max_rpm: 8000,
 }
 
-data.rpm = 4000;
+const dash = {
+    last_time: 0,
+}
 
-function animate(timestamp) {
-    draw_gauge("tachometer_bar", data.rpm/data.maxrpm);
+car.rpm = 4000;
 
-    requestAnimationFrame(animate);
+
+function update(time) {
+    var dt = time - dash.last_time;
+    dash.last_time = time;
+
+    pull(dt);
+    logic(dt);
+    draw(dt);
+
+    requestAnimationFrame(update);
+}
+
+function pull(dt) {
+    //pull sensor information and update car variable
+}
+
+function logic(dt) {
+    //perform arithmetic
+    car.rpm_ratio = car.rpm / car.max_rpm;
+}
+
+function draw(dt) {
+    //update visuals
+    draw_gauge("tachometer_bar", car.rpm_ratio);
 }
 
 function draw_gauge(element_id, gauge_percent) {
@@ -44,8 +69,4 @@ function draw_gauge(element_id, gauge_percent) {
     img.style.clipPath = "polygon(" + path + ")";
 }
 
-function gauge_units(element_id) {
-
-}
-
-requestAnimationFrame(animate);
+requestAnimationFrame(update);
