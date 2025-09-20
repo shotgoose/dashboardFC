@@ -9,24 +9,30 @@
 <body>
     <div id="dashboard">
 
-        <div id="stats" class="gauge">
-            <p>stats</p>
+        <div id="stats-container" class="gauge-container">
+            <div id="stats" class="gauge">
+                <p>stats</p>
+            </div>
         </div>
 
-        <div id="tachometer" class="gauge">
-            <img id="tachometer_outline" class="gauge_outline" src="assets/gaugeOutline4.png"/>
-            <img id="tachometer_bar" class="gauge_bar" src="assets/gaugeIncrements3.png"/>
+        <div id="tachometer-container" class="gauge-container">
+            <div id="tachometer" class="gauge">
+                <img id="tachometer_outline" class="gauge_outline" src="assets/gaugeOutline4.png"/>
+                <img id="tachometer_bar" class="gauge_bar" src="assets/gaugeIncrements3.png"/>
+            </div>
         </div>
 
-        <div id="speedometer" class="gauge">
-            <p>speedometer</p>
+        <div id="speedometer-container" class="gauge-container">
+            <div id="speedometer" class="gauge">
+                <img id="speedometer_outline" class="gauge_outline" src="assets/gaugeOutline3.png"/>
+                <img id="speedometer_bar" class="gauge_bar" src="assets/gaugeIncrements3.png"/>
+            </div>
         </div>
 
     </div>
 
 </body>
 
-<script src="functions.js"></script>
-<script src="main.js"></script>
+<script type="module" src="main.js"></script>
 
 </html>

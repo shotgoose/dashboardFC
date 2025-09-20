@@ -13,11 +13,16 @@ body {
     display: flex;
 }
 
-#tachometer {
-    
+#speedometer-container, 
+#stats-container {
+    transform: scale(0.7);
 }
 
 .gauge {
+
+}
+
+.gauge-container {
     width: 33.33%;
     height: 50%;
     padding-top: 15%;
