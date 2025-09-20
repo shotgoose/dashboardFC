@@ -13,10 +13,41 @@ const car = {
     hazards: false,
     high_beam: false,
     max_rpm: 8000,
+    max_mph: 160,
 }
 
 const dash = {
     last_time: 0,
+}
+
+dash.rpm_gauge = {
+    start_angle: Math.PI,
+    end_angle: (3 / 2) * Math.PI,
+    min_val: 0,
+    max_val: 8000,
+    increment: 1000,
+    outline: document.getElementById("tachometer_outline"),
+    bar: document.getElementById("tachometer_bar"),
+    unit: "RPM x1000",
+    unit_ratio: 1 / 1000,
+    get ratio() {
+        return car.rpm / car.max_rpm;
+    },
+}
+
+dash.mph_gauge = {
+    start_angle: Math.PI,
+    end_angle: (3 /2) * Math.PI,
+    min_val: 0,
+    max_val: 160,
+    increment: 20,
+    outline: null,
+    bar: null,
+    unit_label: "MPH",
+    unit_ratio: 1,
+    get ratio() {
+        return car.mph / car.max_mph;
+    }
 }
 
 car.rpm = 0;
@@ -50,72 +81,75 @@ function logic(dt) {
 
 function draw(dt) {
     //update visuals
-    draw_gauge_bar("tachometer_bar", car.rpm_ratio);
-    // draw_gauge_label("tachometer_outline", 0, 8, 1);
+    draw_gauge(dash.rpm_gauge);
 }
 
-function draw_gauge_bar(element_id, gauge_percent) {
-    const img = document.getElementById(element_id);
-    if (!img) return;
+function draw_gauge(gauge) {
+    // fetch images
+    const bar_img = gauge.bar;
+    const outline_img = gauge.outline;
+
+    // return if images do not exist
+    if (!bar_img || !outline_img) return;
+
+    // fetch gauge percentage of fill, set to 100% if greater than 100%
+    let gauge_percent = gauge.ratio;
     if (gauge_percent > 1) gauge_percent = 1;
 
-    const startAngle = Math.PI;
-    const endAngle = (3 / 2) * Math.PI;
+    // fetch start and end angles, calculate difference
+    const startAngle = gauge.start_angle;
+    const endAngle = gauge.end_angle;
+    const sweep = clockWiseDiff(startAngle, endAngle);
 
-    var path = "50% 50%, 0% 50%";
+    let bar_d = ["50%50%", "0%50%"];
 
-    for (i = 0; i <= (gauge_percent * 100); i++) {
-        var pointAngle = startAngle + endAngle * (i / 100);
+    for (let i = 0; i <= (gauge_percent * 100); i++) {
+        let pointAngle = startAngle + sweep * (i / 100);
 
-        var x = (Math.cos(pointAngle) + 1) / 2;
-        var y = (Math.sin(pointAngle) + 1) / 2;
-        var xf = (x * 100) + "%";
-        var yf = (y * 100) + "%";
+        let x = (Math.cos(pointAngle) + 1) / 2;
+        let y = (Math.sin(pointAngle) + 1) / 2;
+        let str = ((x * 100) + "%") + ((y * 100) + "%");
 
-        path = path + ", " + xf + " " + yf;
+        bar_d.push(str);
     }
 
-    img.style.clipPath = "polygon(" + path + ")";
+    // helper constants
+    const tickWidthRatio = 0.005;
+    const segments = 360;
+
+    // tick calculations
+    const range = (gauge.max_val - gauge.min_val);
+    const ticks = Math.round(range / gauge.increment);
+    const gap = sweep / ticks;
+    const width = sweep * tickWidthRatio;
+
+    let outline_d = ["0%50%"];
+
+    for (let i = 0; i <= segments; i++) {
+        let pointAngle = startAngle + sweep * (i / segments);
+
+        const nearestTick = Math.round((pointAngle - startAngle) / gap);
+        let onTick = false;
+
+        if (nearestTick > 0 && nearestTick < ticks) {
+            let tickAngle = startAngle + (nearestTick * gap);
+
+            if (Math.abs(pointAngle - tickAngle) < width) {
+                if (outline_d[outline_d.length - 1] != "50%50%") outline_d.push("50%50%");
+                onTick = true;
+            }
+        }
+
+        let x = (Math.cos(pointAngle) + 1) / 2;
+        let y = (Math.sin(pointAngle) + 1) / 2;
+        let str = ((x * 100) + "%") + ((y * 100) + "%");
+
+        if (!onTick) outline_d.push(str);
+    }
+
+    bar_img.style.clipPath = "polygon(" + bar_d.join(", ") + ")";
+
+    outline_img.style.clipPath = "polygon(" + outline_d.join(", ") + ")";
 }
-
-// function draw_gauge_label(element_id, min_val, max_val, increment) {
-//     const img = document.getElementById(element_id);
-//     const div = img.parentElement;
-//     if (!img) return;
-
-//     const startAngle = Math.PI;
-//     const endAngle = (3 / 2) * Math.PI;
-
-//     const range = (max_val - min_val);
-//     const labels = range / increment;
-//     const gap = endAngle / labels;
-
-//     var path = "0% 50%";
-
-//     for (i = 0; i <= 100; i++) {
-//         var pointAngle = startAngle + endAngle * (i / 100);
-//         var skip = false;
-
-//         for (a = 1; a <= labels; a++) {
-//             var labelAngleStart = startAngle + a * gap - gap / 20;
-//             var labelAngleEnd = startAngle + a * gap + gap / 20;
-
-//             if (pointAngle > labelAngleStart && pointAngle < labelAngleEnd) {
-//                 path = path + ", 50% 50%";
-//                 skip = true;
-//             }
-
-//         }
-
-//         var x = (Math.cos(pointAngle) + 1) / 2;
-//         var y = (Math.sin(pointAngle) + 1) / 2;
-//         var xf = (x * 100) + "%";
-//         var yf = (y * 100) + "%";
-
-//         if (!skip) path = path + ", " + xf + " " + yf;
-//     }
-
-//     img.style.clipPath = "polygon(" + path + ")";
-// }
 
 requestAnimationFrame(update);
