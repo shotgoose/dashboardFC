@@ -3,13 +3,14 @@ import { Util } from './Util.js';
 const gauges = [];
 
 function create(config) {
-    // Defaults
+    // default values
     const gauge = {
         startAngle: Math.PI,
         endAngle: (3 / 2) * Math.PI,
         minVal: 0,
         maxVal: 0,
         increment: 1,
+        tickWidthRatio: 1 / 500,
         unitLabel: "Unlabeled", 
         unitRatio: 1,
         element: undefined,
@@ -20,19 +21,22 @@ function create(config) {
         outlinePoly: [],
     };
 
-    // Provided config
+    // provided config, if any
     gauge.startAngle = config.startAngle ?? gauge.startAngle;
     gauge.endAngle = config.endAngle ?? gauge.endAngle;
     gauge.minVal = config.minVal ?? gauge.minVal;
     gauge.maxVal = config.maxVal ?? gauge.maxVal;
     gauge.increment = config.increment ?? gauge.increment;
+    gauge.tickWidthRatio = config.tickWidthRatio ?? gauge.tickWidthRatio;
     gauge.unitLabel = config.unitLabel ?? gauge.unitLabel;
     gauge.unitRatio = config.unitRatio ?? gauge.unitRatio;
-    gauge.element = document.getElementById(config.elementId) ?? gauge.element;
-    gauge.outline = gauge.element.querySelector(".gauge_outline") ?? gauge.outline;
-    gauge.bar = gauge.element.querySelector(".gauge_bar") ?? gauge.bar;
 
-    // ratio
+    // elements based on provided id
+    gauge.element = document.getElementById(config.elementId) ?? gauge.element;
+    gauge.outline = gauge.element.querySelector(".gauge-outline") ?? gauge.outline;
+    gauge.bar = gauge.element.querySelector(".gauge-bar") ?? gauge.bar;
+
+    // ratio function
     const value = config.getVal ?? (() => 0);
 
     Object.defineProperty(gauge, 'ratio', {
@@ -42,14 +46,16 @@ function create(config) {
         }
     })
 
-    // polygons
-    const polygons = computePolys(gauge);
-    gauge.outlinePoly = polygons.outlinePoly;
-    gauge.barPolys = polygons.barPolys;
+    // compute polygons
+    computePolys(gauge);
 
     // add to list
     gauges.push(gauge);
 
+    // label gauge
+    label(gauge);
+
+    // return object
     return gauge;
   }
 
@@ -60,7 +66,7 @@ function computePolys(gauge) {
     const sweep = Util.clockWiseDiff(startAngle, endAngle);
 
     // initialize other constants
-    const tickWidthRatio = 0.005;
+    const tickWidthRatio = gauge.tickWidthRatio;
     const segments = Math.round(sweep * (180 / Math.PI));
 
     // tick calculations
@@ -97,7 +103,7 @@ function computePolys(gauge) {
         if (!onTick) outlinePath.push(str);
     }
 
-    let outlinePoly = "polygon(" + outlinePath.join(",") + ")"
+    const outlinePoly = "polygon(" + outlinePath.join(",") + ")"
 
     // calculate all bar paths
     let barPolys = [];
@@ -119,11 +125,12 @@ function computePolys(gauge) {
         }
 
         // store bar path
-        let barPoly = "polygon(" + barPath.join(",") + ")";
+        const barPoly = "polygon(" + barPath.join(",") + ")";
         barPolys.push(barPoly);   
     }
 
-    return { outlinePoly: outlinePoly, barPolys: barPolys};
+    gauge.outlinePoly = outlinePoly;
+    gauge.barPolys = barPolys;
 
 }
 
@@ -155,6 +162,45 @@ function draw(gauge) {
 }
 
 function label(gauge) {
+    // fetch start and end angles, calculate difference
+    const startAngle = gauge.startAngle;
+    const endAngle = gauge.endAngle;
+    const sweep = Util.clockWiseDiff(startAngle, endAngle);
+
+    // label calculations
+    const range = (gauge.maxVal - gauge.minVal);
+    const labels = Math.round(range / gauge.increment);
+    const gap = sweep / labels;
+
+    // constant
+    const labelOffset = 1.1;
+
+    // label layer creation
+    const layer = gauge.element.querySelector(".gauge-labels");
+    const frag = document.createDocumentFragment();
+
+    for (let i = 0; i <= labels; i++) {
+        // establish point 
+        let pointAngle = startAngle + gap * i;
+        let x = (labelOffset * Math.cos(pointAngle) + 1) / 2;
+        let y = (labelOffset * Math.sin(pointAngle) + 1) / 2;
+
+        // establish label value
+        const value = gauge.minVal + (i * gauge.increment * gauge.unitRatio);
+
+        // create text element
+        const span = document.createElement('span');
+        span.className = "gauge-label";
+        span.textContent = value;
+        span.style.left = (x * 100) + "%";
+        span.style.top = (y * 100) + "%";
+
+        // append to frag
+        frag.appendChild(span);
+    }
+
+    // append to layer
+    layer.appendChild(frag);
 
 }
 

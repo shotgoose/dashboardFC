@@ -15,35 +15,42 @@ body {
 
 #speedometer-container, 
 #stats-container {
-    transform: scale(0.7);
+    transform: scale(0.7) translateY(10%);
 }
 
 .gauge {
-
+    aspect-ratio: 1 / 1;
+    position: relative;
+    width: 100%;
 }
 
 .gauge-container {
     width: 33.33%;
-    height: 50%;
-    padding-top: 15%;
+    transform: translateY(10%);
     text-align: center;
     position: relative;
 }
 
-.gauge_bar {
+.gauge-outline,
+.gauge-bar {
     max-width: 100%;
     max-height: 100%;
-    left: 0px;
-    top: 10%;
     position: absolute;
-    z-index: 2;
+    inset: 0;        /* or match whatever offsets you use */
+    z-index: 1;      /* outline */
 }
+.gauge-bar { z-index: 2; }
 
-.gauge_outline {
-    max-width: 100%;
-    max-height: 100%;
-    left: 0px;
-    top: 10%;
+.gauge-labels {
     position: absolute;
-    z-index: 1;
+    inset: 0;        /* same box as the images */
+    z-index: 3;      /* above the images */
+    pointer-events: none;
+    overflow: visible; /* so labels can sit outside the arc */
+    color: #ff9a00;
+    font-family: "Inter var", system-ui, sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    letter-spacing: 0.01em;
 }
+.gauge-label { position: absolute; transform: translate(-50%,-50%); }
