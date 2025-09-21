@@ -1,14 +1,17 @@
 import { Util } from './Util.js';
 
+const gauges = [];
+
 function create(config) {
+    // Defaults
     const gauge = {
         startAngle: Math.PI,
         endAngle: (3 / 2) * Math.PI,
         minVal: 0,
         maxVal: 0,
-        increments: 1,
+        increment: 1,
+        unitLabel: "Unlabeled", 
         unitRatio: 1,
-        unitLabel: "No Label", 
         element: undefined,
         outline: undefined,
         bar: undefined,
@@ -17,43 +20,40 @@ function create(config) {
         outlinePoly: [],
     };
 
-    // Default config
-    gauge.startAngle = Math.PI;
-    gauge.endAngle = (3 / 2) * Math.PI;
-    gauge.barPolys = [];
-    gauge.outlinePoly = [];
-
     // Provided config
+    gauge.startAngle = config.startAngle ?? gauge.startAngle;
+    gauge.endAngle = config.endAngle ?? gauge.endAngle;
     gauge.minVal = config.minVal ?? gauge.minVal;
     gauge.maxVal = config.maxVal ?? gauge.maxVal;
     gauge.increment = config.increment ?? gauge.increment;
     gauge.unitLabel = config.unitLabel ?? gauge.unitLabel;
     gauge.unitRatio = config.unitRatio ?? gauge.unitRatio;
-    gauge.element = config.element ?? gauge.element;
-    gauge.outline = config.outline ?? gauge.outline;
-    gauge.bar = config.bar ?? gauge.bar;
+    gauge.element = document.getElementById(config.elementId) ?? gauge.element;
+    gauge.outline = gauge.element.querySelector(".gauge_outline") ?? gauge.outline;
+    gauge.bar = gauge.element.querySelector(".gauge_bar") ?? gauge.bar;
 
-    // preserve accessors (e.g., get ratio() { ... })
-    const entries = Object.entries(Object.getOwnPropertyDescriptors(config))
-    .filter(([_, d]) => 'get' in d || 'set' in d); // only accessors
+    // ratio
+    const value = config.getVal ?? (() => 0);
 
-    if (entries.length) {
-        Object.defineProperties(gauge, Object.fromEntries(entries));
-    } else if (config.ratio !== undefined) {
+    Object.defineProperty(gauge, 'ratio', {
+        get() {
+            if (gauge.maxVal <= 0) return 0;
+            return value() / gauge.maxVal;
+        }
+    })
 
-    // if they passed a plain value function or number
-    gauge.ratio = config.ratio;
+    // polygons
+    const polygons = computePolys(gauge);
+    gauge.outlinePoly = polygons.outlinePoly;
+    gauge.barPolys = polygons.barPolys;
+
+    // add to list
+    gauges.push(gauge);
 
     return gauge;
   }
 
-    // preserve
-    Object.defineProperties(gauge, Object.getOwnPropertyDescriptors(config));
-
-    return gauge;
-}
-
-function compute(gauge) {
+function computePolys(gauge) {
     // fetch start and end angles, calculate difference
     const startAngle = gauge.startAngle;
     const endAngle = gauge.endAngle;
@@ -98,9 +98,10 @@ function compute(gauge) {
     }
 
     let outlinePoly = "polygon(" + outlinePath.join(",") + ")"
-    gauge.outlinePoly = outlinePoly;
 
     // calculate all bar paths
+    let barPolys = [];
+
     for (let p = 0; p <= segments; p++) {
         // begin bar path
         let barPath = ["50%50%", "0%50%"];
@@ -119,8 +120,10 @@ function compute(gauge) {
 
         // store bar path
         let barPoly = "polygon(" + barPath.join(",") + ")";
-        gauge.barPolys.push(barPoly);   
+        barPolys.push(barPoly);   
     }
+
+    return { outlinePoly: outlinePoly, barPolys: barPolys};
 
 }
 
@@ -155,5 +158,11 @@ function label(gauge) {
 
 }
 
-export const Gauge = {create, compute, draw, label};
+function drawAll() {
+    for (let i = 0; i < gauges.length; i++) {
+        draw(gauges[i]);
+    }
+}
+
+export const Gauge = {gauges, create, computePolys, draw, label, drawAll};
 

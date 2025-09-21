@@ -22,30 +22,19 @@ const car = {
 const dash = {
     lastTime: 0,
     tachometer: Gauge.create({
-        minVal: 0,
-        maxVal: 8000,
+        getVal: () => car.rpm,
+        maxVal: car.max_rpm,
         increment: 1000,
-        element: document.getElementById("tachometer"),
-        outline: document.getElementById("tachometer_outline"),
-        bar: document.getElementById("tachometer_bar"),
         unitLabel: "RPM x1000",
         unitRatio: 1 / 1000,
-        get ratio() {
-            return car.rpm / car.max_rpm;
-        },
+        elementId: "tachometer",
     }),
     speedometer: Gauge.create({
-        minVal: 0,
-        maxVal: 160,
+        getVal: () => car.mph,
+        maxVal: car.max_mph,
         increment: 10,
-        element: document.getElementById("speedometer"),
-        outline: document.getElementById("speedometer_outline"),
-        bar: document.getElementById("speedometer_bar"),
         unitLabel: "MPH",
-        unitRatio: 1,
-        get ratio() {
-            return car.mph / car.max_mph;
-        },
+        elementId: "speedometer",
     }),
 }
 
@@ -54,8 +43,7 @@ car.mph = 20;
 
 function load() {
     // Load dash
-    Gauge.compute(dash.tachometer);
-    Gauge.compute(dash.speedometer);
+
 }
 
 function update(time) {
@@ -85,8 +73,7 @@ function logic(dt) {
 
 function draw(dt) {
     //update visuals
-    Gauge.draw(dash.tachometer);
-    Gauge.draw(dash.speedometer)
+    Gauge.drawAll();
 }
 
 load();
