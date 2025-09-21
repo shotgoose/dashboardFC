@@ -1,5 +1,58 @@
 import { Util } from './Util.js';
 
+function create(config) {
+    const gauge = {
+        startAngle: Math.PI,
+        endAngle: (3 / 2) * Math.PI,
+        minVal: 0,
+        maxVal: 0,
+        increments: 1,
+        unitRatio: 1,
+        unitLabel: "No Label", 
+        element: undefined,
+        outline: undefined,
+        bar: undefined,
+        ratio: 0,
+        barPolys: [],
+        outlinePoly: [],
+    };
+
+    // Default config
+    gauge.startAngle = Math.PI;
+    gauge.endAngle = (3 / 2) * Math.PI;
+    gauge.barPolys = [];
+    gauge.outlinePoly = [];
+
+    // Provided config
+    gauge.minVal = config.minVal ?? gauge.minVal;
+    gauge.maxVal = config.maxVal ?? gauge.maxVal;
+    gauge.increment = config.increment ?? gauge.increment;
+    gauge.unitLabel = config.unitLabel ?? gauge.unitLabel;
+    gauge.unitRatio = config.unitRatio ?? gauge.unitRatio;
+    gauge.element = config.element ?? gauge.element;
+    gauge.outline = config.outline ?? gauge.outline;
+    gauge.bar = config.bar ?? gauge.bar;
+
+    // preserve accessors (e.g., get ratio() { ... })
+    const entries = Object.entries(Object.getOwnPropertyDescriptors(config))
+    .filter(([_, d]) => 'get' in d || 'set' in d); // only accessors
+
+    if (entries.length) {
+        Object.defineProperties(gauge, Object.fromEntries(entries));
+    } else if (config.ratio !== undefined) {
+
+    // if they passed a plain value function or number
+    gauge.ratio = config.ratio;
+
+    return gauge;
+  }
+
+    // preserve
+    Object.defineProperties(gauge, Object.getOwnPropertyDescriptors(config));
+
+    return gauge;
+}
+
 function compute(gauge) {
     // fetch start and end angles, calculate difference
     const startAngle = gauge.startAngle;
@@ -68,7 +121,7 @@ function compute(gauge) {
         let barPoly = "polygon(" + barPath.join(",") + ")";
         gauge.barPolys.push(barPoly);   
     }
-    console.log(gauge.barPolys.length);
+
 }
 
 function draw(gauge) {
@@ -102,5 +155,5 @@ function label(gauge) {
 
 }
 
-export const Gauge = {compute, draw, label};
+export const Gauge = {create, compute, draw, label};
 

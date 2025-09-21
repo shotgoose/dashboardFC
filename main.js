@@ -21,49 +21,42 @@ const car = {
 
 const dash = {
     lastTime: 0,
-}
-
-dash.tachometer = {
-    startAngle: Math.PI,
-    endAngle: (3 / 2) * Math.PI,
-    minVal: 0,
-    maxVal: 8000,
-    increment: 1000,
-    element: document.getElementById("tachometer"),
-    outline: document.getElementById("tachometer_outline"),
-    bar: document.getElementById("tachometer_bar"),
-    unitLabel: "RPM x1000",
-    unitRatio: 1 / 1000,
-    get ratio() {
-        return car.rpm / car.max_rpm;
-    },
-    barPolys: [],
-    outlinePoly: [],
-}
-
-dash.speedometer = {
-    startAngle: Math.PI,
-    endAngle: (3 /2) * Math.PI,
-    minVal: 0,
-    maxVal: 160,
-    increment: 10,
-    element: document.getElementById("speedometer"),
-    outline: document.getElementById("speedometer_outline"),
-    bar: document.getElementById("speedometer_bar"),
-    unitLabel: "MPH",
-    unitRatio: 1,
-    get ratio() {
-        return car.mph / car.max_mph;
-    },
-    barPolys: [],
-    outlinePoly: [],
+    tachometer: Gauge.create({
+        minVal: 0,
+        maxVal: 8000,
+        increment: 1000,
+        element: document.getElementById("tachometer"),
+        outline: document.getElementById("tachometer_outline"),
+        bar: document.getElementById("tachometer_bar"),
+        unitLabel: "RPM x1000",
+        unitRatio: 1 / 1000,
+        get ratio() {
+            return car.rpm / car.max_rpm;
+        },
+    }),
+    speedometer: Gauge.create({
+        minVal: 0,
+        maxVal: 160,
+        increment: 10,
+        element: document.getElementById("speedometer"),
+        outline: document.getElementById("speedometer_outline"),
+        bar: document.getElementById("speedometer_bar"),
+        unitLabel: "MPH",
+        unitRatio: 1,
+        get ratio() {
+            return car.mph / car.max_mph;
+        },
+    }),
 }
 
 car.rpm = 0;
 car.mph = 20;
 
-Gauge.compute(dash.tachometer);
-Gauge.compute(dash.speedometer);
+function load() {
+    // Load dash
+    Gauge.compute(dash.tachometer);
+    Gauge.compute(dash.speedometer);
+}
 
 function update(time) {
     var dt = time - dash.lastTime;
@@ -96,4 +89,5 @@ function draw(dt) {
     Gauge.draw(dash.speedometer)
 }
 
+load();
 requestAnimationFrame(update);
