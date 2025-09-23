@@ -179,6 +179,14 @@ function label(gauge) {
     const layer = gauge.element.querySelector(".gauge-labels");
     const frag = document.createDocumentFragment();
 
+    // create unit label
+    const unitLabel = document.createElement('span');
+    unitLabel.className = "gauge-label unit";
+    unitLabel.textContent = gauge.unitLabel;
+
+    frag.appendChild(unitLabel);
+
+    // create tick labels
     for (let i = 0; i <= labels; i++) {
         // establish point 
         let pointAngle = startAngle + gap * i;
@@ -189,14 +197,14 @@ function label(gauge) {
         const value = gauge.minVal + (i * gauge.increment * gauge.unitRatio);
 
         // create text element
-        const span = document.createElement('span');
-        span.className = "gauge-label";
-        span.textContent = value;
-        span.style.left = (x * 100) + "%";
-        span.style.top = (y * 100) + "%";
+        const tickLabel = document.createElement('span');
+        tickLabel.className = "gauge-label";
+        tickLabel.textContent = value;
+        tickLabel.style.left = (x * 100) + "%";
+        tickLabel.style.top = (y * 100) + "%";
 
         // append to frag
-        frag.appendChild(span);
+        frag.appendChild(tickLabel);
     }
 
     // append to layer

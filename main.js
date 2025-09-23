@@ -16,7 +16,7 @@ const car = {
     hazards: false,
     high_beam: false,
     max_rpm: 8000,
-    max_mph: 160,
+    max_mph: 120,
 }
 
 const dash = {
@@ -38,11 +38,11 @@ const dash = {
     }),
 }
 
-car.rpm = 0;
+car.rpm = 3561;
 car.mph = 20;
 
 function load() {
-    // Load dash
+    // load dash
 
 }
 
@@ -58,21 +58,17 @@ function update(time) {
 }
 
 function pull(dt) {
-    //pull sensor information and update car variable
+    // pull sensor information and update car variable
 
 }
 
-var index = 0;
-
 function logic(dt) {
-    //perform arithmetic
-    index = index + 0.008;
-    car.rpm = 8000*Math.sin(index);
-    car.mph = 160*Math.cos(index);
+    // perform arithmetic
+
 }
 
 function draw(dt) {
-    //update visuals
+    // update visuals
     Gauge.drawAll();
 }
 
