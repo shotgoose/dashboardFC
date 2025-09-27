@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>FC Dashboard pre-release</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="dashboard">
+
+        <div id="stats-container" class="gauge-container">
+            <div id="stats" class="gauge">
+                <canvas id="rx7-model"></canvas>
+            </div>
+        </div>
+
+        <div id="tachometer-container" class="gauge-container">
+            <div id="tachometer" class="gauge">
+                <img class="gauge-outline" src="assets/gauges/gaugeOutline4.png"/>
+                <img class="gauge-bar" src="assets/gauges/gaugeIncrements6.png"/>
+                <div class="gauge-labels"></div>
+                <div class="gauge-info-container">
+                    <div class="gauge-info">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="speedometer-container" class="gauge-container">
+            <div id="speedometer" class="gauge">
+                <img class="gauge-outline" src="assets/gauges/gaugeOutline3.png"/>
+                <img class="gauge-bar" src="assets/gauges/gaugeIncrements6.png"/>
+                <div class="gauge-labels"></div>
+                <div class="gauge-info-container">
+                    <div class="gauge-info">
+                        <span>ODO <span id="odometer-output" class="data-value">147421</span></span><br>
+                        <span>TRIP <span id="trip-output" class="data-value">250</span></span><br>
+                        <span>RANGE <span id="RANGE-output" class="data-value">121</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+<link rel="icon" href="data:,">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./lib/three.module.js",
+    "three/addons/": "./lib/addons/"
+  }
+}
+</script>
+
+<script type="module" src="main.js"></script>
+
+</html>

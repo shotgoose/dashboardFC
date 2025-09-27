@@ -1,7 +1,7 @@
 import * as THREE from '../lib/three.module.js';
 import { GLTFLoader } from '../lib/addons/loaders/GLTFLoader.js';
 
-// DOM / renderer
+// renderer
 const wrap = document.getElementById('stats-container');
 const canvas = document.getElementById('rx7-model');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
@@ -19,7 +19,7 @@ camera.up.set(0, 1, 0);
 // loader
 const loader = new GLTFLoader();
 
-// headlight animation state
+// animation mixer
 let mixer = null;
 
 // headlight animation state
@@ -38,6 +38,7 @@ const roofAnim = {
     playSpeed: 3,
 };
 
+// window animation state
 const windowAnim = {
     name: 'windowAction',
     deployed: false,
@@ -55,8 +56,9 @@ function initialize() {
     // set initial size/aspect
     fitToWrap();
 
-    loader.load('../assets/RX7-VERT-NA-V3.glb', (gltf) => {
-    const bg = 0x000000; // match your page bg if different
+    loader.load('../assets/models/RX7-VERT-NA-V3.glb', (gltf) => {
+    const bg = 0x000000;
+    const ln = 0xff9a00;
 
     gltf.scene.traverse((obj) => {
         if (obj.isMesh) {
@@ -72,8 +74,8 @@ function initialize() {
         });
 
         const edges = new THREE.LineSegments(
-            new THREE.EdgesGeometry(obj.geometry, 15),
-            new THREE.LineBasicMaterial({ color: 0xff9a00 })
+            new THREE.EdgesGeometry(obj.geometry, 20),
+            new THREE.LineBasicMaterial({ color: ln })
         );
         obj.add(edges);
         }
@@ -147,7 +149,7 @@ function render() {
     renderer.render(scene, camera);
 }
 
-// toggle state of animation
+// change state of animation
 // if forceState is left undefined, will toggle current state
 function toggleAnimationState(animationName, forceState) {
     const animation = findAnimation(animationName);
