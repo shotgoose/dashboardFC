@@ -41,6 +41,13 @@ body {
 }
 .gauge-bar { z-index: 2; }
 
+#rx7-model {
+    position: absolute;
+    inset: 0;        /* or match whatever offsets you use */
+    z-index: 1;      /* outline */
+    width: 100%; height: 100%;
+}
+
 .gauge-labels {
     position: absolute;
     inset: 0;

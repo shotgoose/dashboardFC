@@ -11,7 +11,7 @@
 
         <div id="stats-container" class="gauge-container">
             <div id="stats" class="gauge">
-                <p>stats</p>
+                <canvas id="rx7-model"></canvas>
             </div>
         </div>
 
@@ -35,6 +35,20 @@
 
 </body>
 
+
+
+
+<link rel="icon" href="data:,">
+<script type="importmap">
+{
+  "imports": {
+    "three": "./lib/three.module.js",
+    "three/addons/": "./lib/addons/"
+  }
+}
+</script>
+
 <script type="module" src="main.js"></script>
+<script type="module" src="modules/ModelViewer.js"></script>
 
 </html>
