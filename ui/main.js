@@ -1,8 +1,8 @@
 import { Gauge } from './modules/Gauge.js';
 import { Util } from './modules/Util.js';
-import { ModelViewer } from './modules/ModelViewer.js';
+import { Model } from './modules/Model.js';
 
-window.ModelViewer = ModelViewer;
+window.ModelViewer = Model;
 
 const car = {
     rpm: 0,
@@ -46,7 +46,7 @@ car.mph = 20;
 
 function load() {
     // load dash
-    ModelViewer.initialize();
+    Model.initialize();
     
 }
 
@@ -69,20 +69,20 @@ function pull(dt) {
 function logic(dt) {
     // perform arithmetic
 
-    ModelViewer.update(dt / 1000);
+    Model.update(dt / 1000);
 
     // ModelViewer.toggleAnimationState('headlightAction');
     // ModelViewer.toggleAnimationState('roofAction');
     // ModelViewer.toggleAnimationState('windowAction');
 
     // window resize
-    window.addEventListener('resize', ModelViewer.fitToWrap);
+    window.addEventListener('resize', Model.fitToWrap);
 }
 
 function draw(dt) {
     // update visuals
     Gauge.drawAll();
-    ModelViewer.render();
+    Model.render();
 }
 
 load();

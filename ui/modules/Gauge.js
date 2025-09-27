@@ -1,3 +1,5 @@
+// handles tachometer and speedometer gauge animation, labeling, and tick marks
+
 import { Util } from './Util.js';
 
 const gauges = [];
