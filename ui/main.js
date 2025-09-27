@@ -2,6 +2,8 @@ import { Gauge } from './modules/Gauge.js';
 import { Util } from './modules/Util.js';
 import { ModelViewer } from './modules/ModelViewer.js';
 
+window.ModelViewer = ModelViewer;
+
 const car = {
     rpm: 0,
     rpm_ratio: 0,

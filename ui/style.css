@@ -80,7 +80,7 @@ body {
 }
 
 .gauge-label.unit {
-    left: 10%;
+    left: 13%;
     top: 52%;
     width: 100px;
     font-size: 14px;
@@ -110,11 +110,21 @@ body {
 
     font-family: 'Orbitron', sans-serif;
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: 1rem;
     color: #ff9a00;
 }
 
 .data-value {
     font-family: 'Doto', sans-serif;
+    display: inline-block; /* Allows width, height, and proper rounding */
+    border: 2px solid #ff9a00;
+    border-radius: 10px; /* Adjust the value for more or less rounding */
+    padding: 3px 3px; /* Add some padding for spacing */
+    margin: 0.25rem 0;
+}
 
+.data-line {
+    position: relative;
+    top: 0.5rem;
+    line-height: 1.3;
 }

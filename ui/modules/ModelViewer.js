@@ -1,5 +1,5 @@
-import * as THREE from '../lib/three.module.js';
-import { GLTFLoader } from '../lib/addons/loaders/GLTFLoader.js';
+import * as THREE from '../lib/three/three.module.js';
+import { GLTFLoader } from '../lib/three/addons/loaders/GLTFLoader.js';
 
 // renderer
 const wrap = document.getElementById('stats-container');
@@ -56,7 +56,8 @@ function initialize() {
     // set initial size/aspect
     fitToWrap();
 
-    loader.load('../assets/models/RX7-VERT-NA-V3.glb', (gltf) => {
+    const MODEL_URL = new URL('../assets/models/RX7-VERT-NA-V3.glb', import.meta.url).href;
+    loader.load(MODEL_URL, (gltf) => {
     const bg = 0x000000;
     const ln = 0xff9a00;
 
