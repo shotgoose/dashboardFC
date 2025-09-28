@@ -1,6 +1,6 @@
 import { Gauge } from './modules/Gauge.js';
-import { Util } from './modules/Util.js';
 import { Model } from './modules/Model.js';
+import { Icon } from './modules/Icon.js';
 
 window.Model = Model;
 
@@ -47,12 +47,24 @@ car.mph = 20;
 function load() {
     // load dash
     Model.initialize();
+    Icon.initialize();
     
 }
+
+let index = 0;
 
 function update(time) {
     var dt = time - dash.lastTime;
     dash.lastTime = time;
+
+    index = index + 1;
+    if (index > 100) {
+        index = 0;
+        Icon.toggleIcon('indicator_L');
+        Icon.toggleIcon('indicator_R');
+        Icon.toggleIcon('hazard');
+        Icon.toggleIcon('highbeam');
+    }
 
     pull(dt);
     logic(dt);
@@ -70,6 +82,7 @@ function logic(dt) {
     // perform arithmetic
 
     Model.update(dt / 1000);
+    Icon.update();
 
     // ModelViewer.toggleAnimationState('headlightAction');
     // ModelViewer.toggleAnimationState('roofAction');

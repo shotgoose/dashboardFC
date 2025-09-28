@@ -159,7 +159,6 @@ function toggleAnimationState(animationName, forceState) {
     
     if (!action || animation.midpoint == null) return;
     if (animation.playingHalf) return; // ignore while currently playing
-    
 
     let wantDeploy = typeof forceState === 'boolean' ? forceState : !animation.deployed;
 
