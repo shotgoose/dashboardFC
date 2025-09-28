@@ -2,7 +2,7 @@ import { Gauge } from './modules/Gauge.js';
 import { Util } from './modules/Util.js';
 import { Model } from './modules/Model.js';
 
-window.ModelViewer = Model;
+window.Model = Model;
 
 const car = {
     rpm: 0,

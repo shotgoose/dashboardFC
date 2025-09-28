@@ -1,5 +1,4 @@
 // handles rx7 model and animations on left gauge
-
 import * as THREE from '../lib/three/three.module.js';
 import { GLTFLoader } from '../lib/three/addons/loaders/GLTFLoader.js';
 
