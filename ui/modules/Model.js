@@ -14,7 +14,7 @@ const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 1000);
 
 // isometric view
 camera.position.set(3, 3, 3);
-camera.lookAt(0, 1.3, 0.4);
+camera.lookAt(0, 1.6, 0.4);
 camera.up.set(0, 1, 0);
 
 // loader

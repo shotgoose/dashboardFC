@@ -175,7 +175,7 @@ function label(gauge) {
     const gap = sweep / labels;
 
     // constant
-    const labelOffset = 1.1;
+    const labelOffset = 1.05;
 
     // label layer creation
     const layer = gauge.element.querySelector(".gauge-labels");

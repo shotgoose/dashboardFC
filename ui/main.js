@@ -1,6 +1,7 @@
 import { Gauge } from './modules/Gauge.js';
 import { Model } from './modules/Model.js';
 import { Icon } from './modules/Icon.js';
+import { Meter } from './modules/Meter.js';
 
 window.Model = Model;
 
@@ -50,6 +51,7 @@ function load() {
     // load dash
     Model.initialize();
     Icon.initialize();
+    Meter.initialize();
     
 }
 

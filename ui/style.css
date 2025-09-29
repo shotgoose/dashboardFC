@@ -17,7 +17,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 95vh;
 }
 
 #dashboard {
@@ -134,4 +134,23 @@ body {
     padding-top: 7px;
     width: 15%;
     aspect-ratio: 1 / 1;
+}
+
+.model-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    overflow: visible;
+    color: #ff9a00;
+}
+
+.model-label {
+    position: absolute;
+    font-family: 'Orbitron', sans-serif;
+    text-align: left;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: #ff9a00;
+    width: 10rem;
 }
