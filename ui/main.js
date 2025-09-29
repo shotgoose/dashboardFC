@@ -82,7 +82,7 @@ function logic(dt) {
 function draw(dt) {
     // update visuals
     Gauge.drawAll();
-    Model.render();
+    ModelViewer.render();
 }
 
 load();
