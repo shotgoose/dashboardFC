@@ -22,6 +22,8 @@ const car = {
     max_mph: 120,
 }
 
+window.car = car;
+
 const dash = {
     lastTime: 0,
     tachometer: Gauge.create({
