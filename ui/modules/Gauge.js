@@ -214,11 +214,11 @@ function label(gauge) {
 
 }
 
-function drawAll() {
+function render() {
     for (let i = 0; i < gauges.length; i++) {
         draw(gauges[i]);
     }
 }
 
-export const Gauge = {gauges, create, computePolys, draw, label, drawAll};
+export const Gauge = { create, computePolys, draw, label, render};
 

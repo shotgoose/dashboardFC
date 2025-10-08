@@ -151,6 +151,30 @@ function render() {
     renderer.render(scene, camera);
 }
 
+function toggleHeadlights(forceState) {
+    toggleAnimationState('headlightAction', forceState);
+}
+
+function toggleRoof(forceState) {
+    toggleAnimationState('roofAction', forceState);
+}
+
+function toggleWindows(forceState) {
+    toggleAnimationState('headlightAction', forceState);
+}
+
+function fetchHeadlightsState() {
+    return headlightAnim.deployed;
+}
+
+function fetchRoofState() {
+    return roofAnim.deployed;
+}
+
+function fetchWindowsState() {
+    return windowAnim.deployed;
+}
+
 // change state of animation
 // if forceState is left undefined, will toggle current state
 function toggleAnimationState(animationName, forceState) {
@@ -190,4 +214,5 @@ function findAnimation(name) {
     return null;
 }
 
-export const Model = { initialize, update, render, fitToWrap, toggleAnimationState };
+export const Model = { initialize, update, render, fitToWrap, toggleHeadlights, toggleRoof, 
+    toggleWindows, fetchHeadlightsState, fetchRoofState, fetchWindowsState };

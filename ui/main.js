@@ -88,17 +88,13 @@ function logic(dt) {
     Model.update(dt / 1000);
     Icon.update();
 
-    // ModelViewer.toggleAnimationState('headlightAction');
-    // ModelViewer.toggleAnimationState('roofAction');
-    // ModelViewer.toggleAnimationState('windowAction');
-
     // window resize
     window.addEventListener('resize', Model.fitToWrap);
 }
 
 function draw(dt) {
     // update visuals
-    Gauge.drawAll();
+    Gauge.render();
     Model.render();
 }
 
