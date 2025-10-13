@@ -38,7 +38,7 @@ function label() {
         let modelLabel = document.createElement('span');
         modelLabel.className = "model-label";
         modelLabel.id = "stats-" + label.ref;
-        modelLabel.style.left = (x * 100) + "%";
+        modelLabel.style.left = ((x - .05) * 100) + "%";
         modelLabel.style.top = (y * 100) + "%";
 
         // create label title

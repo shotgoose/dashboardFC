@@ -39,7 +39,7 @@ function create(config) {
         ratio: 0,
         barPolys: [],
         outlinePoly: [],
-    };
+    }
 
     // provided config, if any
     gauge.startAngle = config.startAngle ?? gauge.startAngle;
