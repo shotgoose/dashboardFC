@@ -70,8 +70,12 @@ function label() {
 
 }
 
-function update(car) { 
+function update(dt) { 
+    const car = fetchCar();
+}
 
+function fetchCar() {
+    return window.car;
 }
 
 export const Meter = { initialize, label, update }; 

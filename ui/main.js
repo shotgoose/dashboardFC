@@ -1,9 +1,8 @@
-import { Gauge } from './modules/Gauge.js';
-import { Model } from './modules/Model.js';
-import { Icon } from './modules/Icon.js';
-import { Meter } from './modules/Meter.js';
-
-window.Model = Model;
+// import ui modules
+import { Gauge } from './modules/ui/Gauge.js';
+import { Model } from './modules/ui/Model.js';
+import { Icon } from './modules/ui/Icon.js';
+import { Meter } from './modules/ui/Meter.js';
 
 const car = {
     rpm: 0,
@@ -13,7 +12,7 @@ const car = {
     oil_pressure: 0,
     voltage: 0,
     fuel_level: 0,
-    outside_temp: 0,  
+    outside_temp: 0,
     illumination: false,
     right_turn_signal: false,
     left_turn_signal: false,
@@ -24,51 +23,29 @@ const car = {
 }
 
 window.car = car;
+window.prevTime = 0;
 
-const dash = {
-    lastTime: 0,
-    tachometer: Gauge.create({
-        getVal: () => car.rpm,
-        maxVal: car.max_rpm,
-        increment: 1000,
-        unitLabel: "RPM x1000",
-        unitRatio: 1 / 1000,
-        elementId: "tachometer",
-    }),
-    speedometer: Gauge.create({
-        getVal: () => car.mph,
-        maxVal: car.max_mph,
-        increment: 10,
-        unitLabel: "MPH",
-        elementId: "speedometer",
-    }),
-}
-
+//temp - set mph and rpm for visuals
 car.rpm = 3561;
 car.mph = 20;
 
 function load() {
-    // load dash
+    // intialize modules
     Model.initialize();
     Icon.initialize();
     Meter.initialize();
-    
+    Gauge.initialize();
 }
 
-function update(time) {
-    var dt = time - dash.lastTime;
-    dash.lastTime = time;
-
-    Icon.toggleIcon('indicator_L');
-    Icon.toggleIcon('indicator_R');
-    Icon.toggleIcon('hazard');
-    Icon.toggleIcon('highbeam');
+function loop(time) {
+    var dt = time - window.prevTime;
+    window.prevTime = time;
 
     pull(dt);
     logic(dt);
     draw(dt);
 
-    requestAnimationFrame(update);
+    requestAnimationFrame(loop);
 }
 
 function pull(dt) {
@@ -77,8 +54,7 @@ function pull(dt) {
 }
 
 function logic(dt) {
-    // perform arithmetic
-
+    // module updates
     Model.update(dt / 1000);
     Icon.update();
 
@@ -87,10 +63,10 @@ function logic(dt) {
 }
 
 function draw(dt) {
-    // update visuals
+    // render visuals
     Gauge.render();
     Model.render();
 }
 
 load();
-requestAnimationFrame(update);
+requestAnimationFrame(loop);

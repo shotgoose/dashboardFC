@@ -35,8 +35,8 @@ const icons = [indicator_L, indicator_R, hazard, highbeam];
 function initialize() {
     for (let i = 0; i < icons.length; i++) {
         let icon = icons[i];
-        const ON_URL = new URL('../assets/icons/' + icon.onimg, import.meta.url).href;
-        const OFF_URL = new URL('../assets/icons/' + icon.offimg, import.meta.url).href;
+        const ON_URL = new URL('../../assets/icons/' + icon.onimg, import.meta.url).href;
+        const OFF_URL = new URL('../../assets/icons/' + icon.offimg, import.meta.url).href;
         icon.onimg = ON_URL;
         icon.offimg = OFF_URL;
     }

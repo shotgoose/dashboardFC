@@ -1,8 +1,26 @@
 // handles tachometer and speedometer gauge animation, labeling, and tick marks
 
-import { Util } from './Util.js';
+import { Util } from '../Util.js';
 
 const gauges = [];
+
+function initialize() {
+    Gauge.create({
+        getVal: () => car.rpm,
+        maxVal: car.max_rpm,
+        increment: 1000,
+        unitLabel: "RPM x1000",
+        unitRatio: 1 / 1000,
+        elementId: "tachometer",
+    })
+    Gauge.create({
+        getVal: () => car.mph,
+        maxVal: car.max_mph,
+        increment: 10,
+        unitLabel: "MPH",
+        elementId: "speedometer",
+    })
+}
 
 function create(config) {
     // default values
@@ -214,11 +232,15 @@ function label(gauge) {
 
 }
 
+function update(dt) {
+
+}
+
 function render() {
     for (let i = 0; i < gauges.length; i++) {
         draw(gauges[i]);
     }
 }
 
-export const Gauge = { create, computePolys, draw, label, render};
+export const Gauge = { initialize, create, computePolys, draw, label, render};
 
