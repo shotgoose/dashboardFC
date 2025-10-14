@@ -1,7 +1,7 @@
 // declare car 
 const car = {
+    // car data values
     rpm: 0,
-    rpm_ratio: 0,
     mph: 0,
     coolant_temp: 0,
     oil_pressure: 0,
@@ -17,14 +17,16 @@ const car = {
     right_turn_signal: false,
     left_turn_signal: false,
     hazards: false,
-    high_beam: false,
+    high_beam: false, 
+
+    // reference values
     max_rpm: 8000,
     max_mph: 120,
     max_safe_rpm: 6800,
-    min_coolant_temp: 0, //adjust
-    max_coolant_temp: 0, //adjust
+    min_coolant_temp: 82.2, //adjust
+    max_coolant_temp: 98.8, //adjust
     min_oil_pressure: 20, //adjust
-    max_oil_pressure: 0, //adjust
+    max_oil_pressure: 60, //adjust
     min_voltage_on: 13.5, //adjust if needed
     min_voltage_off: 12.4, //adjust if needed
     expected_mpg: 14, //adjust if needed
@@ -33,7 +35,48 @@ const car = {
     max_warming_time: 300, //adjust if needed
 }
 
-// function to set car variable
+// pull car data
+let ws;
+
+function connect() {
+    console.log("connecting")
+
+    ws = new WebSocket("wsL//localhost:8765");
+
+    ws.onopen = () => {
+        console.log("Connected to car data server")
+    }
+
+    ws.onmessage = (event) => {
+        try {
+            const message = JSON.parse(event.data);
+
+            if (message.type === "car_update" && message.car) {
+                Object.assign(car, message.car);
+            }
+        }
+        catch (err) {
+            console.error("Invalid JSON")
+        }
+    }
+
+    ws.onclose = () => {
+        console.warn("WebSocket disconnected. Retrying in 2s");
+        setTimeout(connect, 2000);
+    }
+
+    ws.onerror = (err) => {
+        console.error("WebSocket error: ", err);
+        ws.close();
+    }
+}
+
+// load
+function initialize() {
+    connect();
+}
+
+// function to set car variable - should be used only for testing
 function set(variable, value) {
     if (!car.hasOwnProperty(variable)) {
         console.warn("Variable does not exist");
@@ -63,4 +106,4 @@ function fetch() {
     });
 }
 
-export const Car = { set, fetch };
+export const Car = { initialize, set, fetch };

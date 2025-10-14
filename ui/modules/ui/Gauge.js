@@ -243,5 +243,5 @@ function render() {
     }
 }
 
-export const Gauge = { initialize, create, computePolys, draw, label, render };
+export const Gauge = { initialize, create, render };
 
