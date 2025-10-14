@@ -20,7 +20,7 @@ const car = {
     max_safe_rpm: 6800,
     min_coolant_temp: 0, //adjust
     max_coolant_temp: 0, //adjust
-    min_oil_pressure: 0, //adjust
+    min_oil_pressure: 20, //adjust
     max_oil_pressure: 0, //adjust
     min_voltage_on: 13.5, //adjust if needed
     min_voltage_off: 12.4, //adjust if needed
