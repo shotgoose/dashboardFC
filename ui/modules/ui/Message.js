@@ -1,13 +1,13 @@
 import { Car } from '../Car.js';
 
+// fetch car
+const car = Car.fetch();
+
 const messageElement = document.getElementById('message');
 var urgent = false;
 var messageContent = "";
 
 function setMessage() {
-    // fetch car variable
-    const car = Car.fetch();
-
     // test cases in order of priority
 
     // case: engine off and lights on

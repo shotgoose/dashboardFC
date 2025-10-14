@@ -9,6 +9,9 @@ const car = {
     fuel_level: 0,
     outside_temp: 0,
     mpg: 0,
+    odometer: 0,
+    trip: 0,
+    range: 0,
     runtime: 0, // time engine has been on in seconds
     illumination: false,
     right_turn_signal: false,

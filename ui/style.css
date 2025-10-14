@@ -121,6 +121,7 @@ body {
     border-radius: 10px; /* Adjust the value for more or less rounding */
     padding: 3px 3px; /* Add some padding for spacing */
     margin: 0.25rem 0;
+    text-align: center;
 }
 
 .model-data-value {

@@ -1,30 +1,36 @@
 import { Car } from '../Car.js';
 
-// handles data formatting and output
-const coolant_temp = {title: 'WTR TEMP', unit: '°C', ref: 'coolant_temp', r: (3 / 4) * Math.PI}
-const oil_pressure = {title: 'OIL PRES', unit: 'psi', ref: 'oil_pressure', r: (1 / 2) * Math.PI}
-const voltage = {title: 'VOLTS', unit: 'V', ref: 'voltage', x: 0, y: 0, r: (5 / 4) * Math.PI}
-const fuel_level = {title: 'FUEL', unit: '%', ref: 'fuel_level', r: (1 / 4) * Math.PI}
-const mpg = {title: 'MILEAGE', unit: 'mpg', ref: 'mpg', r: (7 / 4) * Math.PI}
+// fetch car
+const car = Car.fetch();
 
-const labels = [ coolant_temp, oil_pressure, voltage, fuel_level, mpg];
+// handles data formatting and output
+const coolant_temp = {title: 'WTR TEMP', unit: '°C', ref: 'coolant_temp', r: (3 / 4) * Math.PI, minLength: 2}
+const oil_pressure = {title: 'OIL PRES', unit: 'psi', ref: 'oil_pressure', r: (1 / 2) * Math.PI, minLength: 2}
+const voltage = {title: 'VOLTS', unit: 'V', ref: 'voltage', x: 0, y: 0, r: (5 / 4) * Math.PI, minLength: 3}
+const fuel_level = {title: 'FUEL', unit: '%', ref: 'fuel_level', r: (1 / 4) * Math.PI, minLength: 2}
+const mpg = {title: 'MILEAGE', unit: 'mpg', ref: 'mpg', r: (7 / 4) * Math.PI, minLength: 3}
+
+//speedo values
+const odometer = {ref: 'odometer', element: document.getElementById('odometer-reading'), minLength: 3};
+const trip = {ref: 'trip', element: document.getElementById('trip-reading'), minLength: 3};
+const range = {ref: 'range', element: document.getElementById('range-reading'), minLength: 3};
+
+const modelLabels = [ coolant_temp, oil_pressure, voltage, fuel_level, mpg];
+const labels = [ coolant_temp, oil_pressure, voltage, fuel_level, mpg, odometer, trip, range];
 
 function initialize() {
     // start angle
     const startAngle = 0;
 
     // label layer creation
-    //const layer = gauge.element.querySelector(".gauge-labels");
     const layer = document.getElementById('model-overlay');
     const frag = document.createDocumentFragment();
-
-    //const br = document.createElement('break');
 
     const labelOffset = 1.2;
 
     // create labels
-    for (let i = 0; i < labels.length; i++) {
-        let label = labels[i];
+    for (let i = 0; i < modelLabels.length; i++) {
+        let label = modelLabels[i];
 
         // establish point 
         let pointAngle = startAngle + label.r;
@@ -47,7 +53,7 @@ function initialize() {
         reading.className = "model-data-value";
         reading.id = label.ref + "-reading";
         reading.textContent = "000";
-        labels[i].element = reading;
+        modelLabels[i].element = reading;
 
         // create unit label sub element
         let unit = document.createElement('span');
@@ -71,10 +77,9 @@ function initialize() {
 function update(dt) { 
     for (let i = 0; i < labels.length; i++) {
         const label = labels[i];
-        const car = Car.fetch();
 
         const val = car[label.ref];
-        const str = val.toString().padStart(2, '0');
+        const str = val.toString().padStart(label.minLength, '0');
         label.element.textContent = str;
     }
 }
