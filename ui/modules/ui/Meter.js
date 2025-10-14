@@ -1,3 +1,5 @@
+import { Car } from '../Car.js';
+
 // handles data formatting and output
 const coolant_temp = {title: 'WTR TEMP', unit: '°C', ref: 'coolant_temp', r: (3 / 4) * Math.PI}
 const oil_pressure = {title: 'OIL PRES', unit: 'psi', ref: 'oil_pressure', r: (1 / 2) * Math.PI}
@@ -8,10 +10,6 @@ const mpg = {title: 'MILEAGE', unit: 'mpg', ref: 'mpg', r: (7 / 4) * Math.PI}
 const labels = [ coolant_temp, oil_pressure, voltage, fuel_level, mpg];
 
 function initialize() {
-    label();
-}
-
-function label() {
     // start angle
     const startAngle = 0;
 
@@ -49,6 +47,7 @@ function label() {
         reading.className = "data-value";
         reading.id = label.ref + "-reading";
         reading.textContent = "000";
+        labels[i].element = reading;
 
         // create unit label sub element
         let unit = document.createElement('span');
@@ -70,11 +69,14 @@ function label() {
 }
 
 function update(dt) { 
-    //const car = fetchCar();
+    for (let i = 0; i < labels.length; i++) {
+        const label = labels[i];
+        const car = Car.fetch();
+
+        const val = car[label.ref];
+        const str = val.toString().padStart(3, '0');
+        label.element.textContent = str;
+    }
 }
 
-function fetchCar() {
-    return window.car;
-}
-
-export const Meter = { initialize, label, update }; 
+export const Meter = { initialize, update }; 

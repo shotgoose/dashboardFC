@@ -71,7 +71,7 @@ function setMessage() {
         urgent = false;
     }
     // case: lower than expected mileage
-    else if (car.mileage <= car.expected_mileage) {
+    else if (car.mpg <= car.expected_mpg) {
         messageContent = "LOW MPG";
         urgent = false;
     }

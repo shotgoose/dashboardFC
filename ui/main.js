@@ -39,6 +39,7 @@ function logic(dt) {
     Model.update(dt / 1000);
     Icon.update();
     Message.update();
+    Meter.update();
 
     // window resize
     window.addEventListener('resize', Model.fitToWrap);
@@ -56,3 +57,8 @@ requestAnimationFrame(loop);
 //temp - set mph and rpm for visuals
 Car.set('rpm', 5423)
 Car.set('mph', 44);
+Car.set('fuel_level', 21);
+Car.set('mpg', 12.5);
+Car.set('voltage', 13.8)
+Car.set('coolant_temp', 120);
+Car.set('oil_pressure', 30);
