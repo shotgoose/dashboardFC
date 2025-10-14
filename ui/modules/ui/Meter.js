@@ -11,7 +11,7 @@ const fuel_level = {title: 'FUEL', unit: '%', ref: 'fuel_level', r: (1 / 4) * Ma
 const mpg = {title: 'MILEAGE', unit: 'mpg', ref: 'mpg', r: (7 / 4) * Math.PI, minLength: 3}
 
 //speedo values
-const odometer = {ref: 'odometer', element: document.getElementById('odometer-reading'), minLength: 3};
+const odometer = {ref: 'odometer', element: document.getElementById('odometer-reading'), minLength: 6};
 const trip = {ref: 'trip', element: document.getElementById('trip-reading'), minLength: 3};
 const range = {ref: 'range', element: document.getElementById('range-reading'), minLength: 3};
 

@@ -3,6 +3,7 @@ import { Car } from '../Car.js';
 // fetch car
 const car = Car.fetch();
 
+// set variables
 const messageElement = document.getElementById('message');
 var urgent = false;
 var messageContent = "";
