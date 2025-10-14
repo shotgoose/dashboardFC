@@ -45,9 +45,9 @@ function set(variable, value) {
     car[variable] = value;
 }
 
-// function to fetch car data
+// function to fetch read only car data
 function fetch() {
-    return car;
+    return Object.freeze(structuredClone(car));
 }
 
 export const Car = { set, fetch };
