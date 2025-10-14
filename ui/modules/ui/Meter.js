@@ -44,7 +44,7 @@ function initialize() {
 
         // create stat sub element
         let reading = document.createElement('span');
-        reading.className = "data-value";
+        reading.className = "model-data-value";
         reading.id = label.ref + "-reading";
         reading.textContent = "000";
         labels[i].element = reading;
@@ -74,7 +74,7 @@ function update(dt) {
         const car = Car.fetch();
 
         const val = car[label.ref];
-        const str = val.toString().padStart(3, '0');
+        const str = val.toString().padStart(2, '0');
         label.element.textContent = str;
     }
 }

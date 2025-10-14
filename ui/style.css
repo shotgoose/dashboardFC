@@ -123,6 +123,18 @@ body {
     margin: 0.25rem 0;
 }
 
+.model-data-value {
+    font-family: 'Doto', sans-serif;
+    display: inline-block; /* Allows width, height, and proper rounding */
+    border: 2px solid #ff9a00;
+    border-radius: 10px; /* Adjust the value for more or less rounding */
+    padding: 3px 3px; /* Add some padding for spacing */
+    margin: 0.25rem 0;
+    width: 3.5rem;
+    font-size: 1.3rem;
+    text-align: center;
+}
+
 .data-line {
     position: relative;
     top: 0.5rem;

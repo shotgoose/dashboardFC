@@ -25,7 +25,7 @@ const car = {
     min_voltage_on: 13.5, //adjust if needed
     min_voltage_off: 12.4, //adjust if needed
     expected_mpg: 14, //adjust if needed
-    fuel_warn_level: .20,
+    fuel_warn_level: 20,
     max_cold_revs: 3500, //adjust if needed
     max_warming_time: 300, //adjust if needed
 }
