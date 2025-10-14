@@ -1,5 +1,4 @@
 // handles data formatting and output
-
 const coolant_temp = {title: 'WTR TEMP', unit: '°C', ref: 'coolant_temp', r: (3 / 4) * Math.PI}
 const oil_pressure = {title: 'OIL PRES', unit: 'psi', ref: 'oil_pressure', r: (1 / 2) * Math.PI}
 const voltage = {title: 'VOLTS', unit: 'V', ref: 'voltage', x: 0, y: 0, r: (5 / 4) * Math.PI}
@@ -71,7 +70,7 @@ function label() {
 }
 
 function update(dt) { 
-    const car = fetchCar();
+    //const car = fetchCar();
 }
 
 function fetchCar() {

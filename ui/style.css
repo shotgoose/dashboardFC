@@ -158,24 +158,34 @@ body {
 #message-title {
     font-family: 'Orbitron', sans-serif;
     position: absolute;
-    top: 110%;
-    width: 10%;
-    left: 40%;
+    bottom: -1.5em;          /* positions title just below the board */
+    left: 50%;
+    transform: translateX(-50%);
     color: #ff9a00;
+    white-space: nowrap;     /* prevents wrapping */
 }
 
 #message-board {
     position: absolute;
     font-family: 'Doto', sans-serif;
-    display: inline-block; /* Allows width, height, and proper rounding */
+
+    /* Use flexbox for clean centering */
+    display: flex;
+    align-items: center;      /* vertical centering */
+    justify-content: center;  /* horizontal centering */
+
     border: 2px solid #ff9a00;
-    border-radius: 10px; /* Adjust the value for more or less rounding */
-    padding-top: 3%;
+    border-radius: 10px;
+    box-sizing: border-box;
+
     z-index: 3;
     width: 33%;
-    height: 7%;
+    height: 12%;
     left: 33%;
     top: 80%;
     text-align: center;
-    vertical-align: middle;
+}
+
+#message {
+    font-size: 1.4rem;
 }

@@ -1,8 +1,9 @@
 // handles tachometer and speedometer gauge animation, labeling, and tick marks
-
 import { Util } from '../Util.js';
+import { Car } from '../Car.js';
 
 const gauges = [];
+const car = Car.fetch();
 
 function initialize() {
     Gauge.create({
@@ -242,5 +243,5 @@ function render() {
     }
 }
 
-export const Gauge = { initialize, create, computePolys, draw, label, render};
+export const Gauge = { initialize, create, computePolys, draw, label, render };
 
