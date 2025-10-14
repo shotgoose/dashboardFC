@@ -25,7 +25,7 @@ const car = {
     min_voltage_on: 13.5, //adjust if needed
     min_voltage_off: 12.4, //adjust if needed
     expected_mileage: 14, //adjust if needed
-    fuel_warn_level: .25,
+    fuel_warn_level: .20,
     max_cold_revs: 3500, //adjust if needed
     max_warming_time: 300, //adjust if needed
 }
@@ -47,7 +47,17 @@ function set(variable, value) {
 
 // function to fetch read only car data
 function fetch() {
-    return Object.freeze(structuredClone(car));
+    return new Proxy(car, {
+        set() {
+            throw new Error("Cannot modify read-only car data");
+        },
+        deleteProperty() {
+            throw new Error("Cannot delete properties on read-only car data");
+        },
+        defineProperty() {
+            throw new Error("Cannot define new properties on read-only car data");
+        }
+    });
 }
 
 export const Car = { set, fetch };
