@@ -2,11 +2,20 @@
 import asyncio, json, random, time, threading
 import websockets
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from functools import partial
 
-# serve ./dashboard (contains index.html etc.)
+class NoCacheHandler(SimpleHTTPRequestHandler):
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
+
 def start_http():
-    server = ThreadingHTTPServer(('0.0.0.0', 8000), SimpleHTTPRequestHandler)
-    print("HTTP server running on http://0.0.0.0:8000")
+    # serve from ./ui explicitly so CWD doesn’t matter
+    handler = partial(NoCacheHandler, directory="ui")
+    server = ThreadingHTTPServer(("0.0.0.0", 8000), handler)
+    print("HTTP on http://localhost:8000 (serving ./ui, no-cache)")
     server.serve_forever()
 
 # fake sensor read

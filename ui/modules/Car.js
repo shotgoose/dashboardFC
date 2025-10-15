@@ -35,13 +35,18 @@ const car = {
     max_warming_time: 300, //adjust if needed
 }
 
+function makeWsUrl() {
+    const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+    const host = location.hostname; // e.g., 'localhost'
+    const port = 8765;              // WS server port
+    return `${proto}://${host}:${port}`;
+}
+
 // pull car data
-let ws;
-
 function connect() {
-    console.log("connecting")
-
-    ws = new WebSocket("wsL//localhost:8765");
+    const url = makeWsUrl();
+    console.log('Connecting to', url);
+    const ws = new WebSocket(url);
 
     ws.onopen = () => {
         console.log("Connected to car data server")
