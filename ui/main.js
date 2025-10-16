@@ -53,15 +53,3 @@ function draw(dt) {
 
 load();
 requestAnimationFrame(loop);
-
-//temp - set car variables for visuals
-Car.set('rpm', 4000);
-Car.set('mph', 44);
-Car.set('fuel_level', 23);
-Car.set('mpg', 16.5);
-Car.set('voltage', 13.8)
-Car.set('coolant_temp', 90.8);
-Car.set('oil_pressure', 30);
-Car.set('odometer', 147428);
-Car.set('trip', 142);
-Car.set('range', 42);

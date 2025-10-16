@@ -1,4 +1,4 @@
-# server.py
+# simple local http and websocket server
 import asyncio, json, threading
 import websockets
 from websockets.exceptions import ConnectionClosedOK, ConnectionClosedError
@@ -20,11 +20,7 @@ def start_http():
 
 CLIENTS = set()
 
-# ---- WebSocket handler (compatible with websockets old/new) ----
-# change this:
-# async def ws_handler(ws, path):
-
-# to this:
+# WebSocket Handler
 async def ws_handler(ws, path=None):  # <-- compatible with both APIs
     CLIENTS.add(ws)
     try:
@@ -36,7 +32,7 @@ async def ws_handler(ws, path=None):  # <-- compatible with both APIs
         CLIENTS.discard(ws)
 
 
-# ---- Broadcast loop; never crash ----
+# Broadcast loop, avoid crashes at all costs
 async def broadcaster():
     while True:
         try:
@@ -65,14 +61,13 @@ async def broadcaster():
         except Exception as e:
             # Log but keep the loop alive
             print("Broadcast error:", repr(e))
-            await asyncio.sleep(0.5)
+            await asyncio.sleep(1/60)
 
 async def main():
     # HTTP server in a background thread
     threading.Thread(target=start_http, daemon=True).start()
 
     # WebSocket server (set a ping interval to keep connections healthy)
-    # If your version supports kwargs, these are harmless; otherwise omit.
     server = websockets.serve(ws_handler, "0.0.0.0", 8765, ping_interval=20, ping_timeout=20)
     async with server:
         print("WebSocket running on ws://0.0.0.0:8765")
