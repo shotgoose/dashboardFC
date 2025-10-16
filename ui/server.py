@@ -61,7 +61,7 @@ async def broadcaster():
                         dead.append(c)
                 for c in dead:
                     CLIENTS.discard(c)
-            await asyncio.sleep(0.05)  # 20 Hz
+            await asyncio.sleep(1/60)  # 60 Hz
         except Exception as e:
             # Log but keep the loop alive
             print("Broadcast error:", repr(e))
