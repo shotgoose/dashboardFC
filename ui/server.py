@@ -1,9 +1,21 @@
 # simple local http and websocket server
 import asyncio, json, threading
 import websockets
+import sys
+import os
 from websockets.exceptions import ConnectionClosedOK, ConnectionClosedError
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from functools import partial
+
+# import data from interpreter
+current_dir = os.getcwd()
+parent_dir = os.path.dirname(current_dir)
+interpreter_dir = os.path.join(parent_dir, "interpreter")
+
+if interpreter_dir not in sys.path:
+    sys.path.append(interpreter_dir)
+
+from interpreter import data
 
 class NoCacheHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
