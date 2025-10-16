@@ -35,6 +35,8 @@ const car = {
     max_warming_time: 300, //adjust if needed
 }
 
+window.car = car;
+
 function makeWsUrl() {
     const proto = location.protocol === 'https:' ? 'wss' : 'ws';
     const host = location.hostname; // e.g., 'localhost'
@@ -42,43 +44,90 @@ function makeWsUrl() {
     return `${proto}://${host}:${port}`;
 }
 
-// pull car data
-function connect() {
-    const url = makeWsUrl();
-    console.log('Connecting to', url);
-    const ws = new WebSocket(url);
+// connection
+let ws = null;
+let reconnectTimer = null;
+let reconnectAttempts = 0;
+let shouldReconnect = true; // set to false if you intentionally call close()
 
-    ws.onopen = () => {
-        console.log("Connected to car data server")
-    }
+const MIN_DELAY = 500;      // ms
+const MAX_DELAY = 10000;    // ms
 
-    ws.onmessage = (event) => {
-        try {
-            const message = JSON.parse(event.data);
-
-            if (message.type === "car_update" && message.car) {
-                Object.assign(car, message.car);
-            }
-        }
-        catch (err) {
-            console.error("Invalid JSON")
-        }
-    }
-
-    ws.onclose = () => {
-        console.warn("WebSocket disconnected. Retrying in 2s");
-        setTimeout(connect, 2000);
-    }
-
-    ws.onerror = (err) => {
-        console.error("WebSocket error: ", err);
-        ws.close();
-    }
+function backoffDelay() {
+  // exponential backoff with jitter
+  const base = Math.min(MAX_DELAY, MIN_DELAY * 2 ** reconnectAttempts);
+  const jitter = Math.random() * 0.3 * base; // up to +30% jitter
+  return Math.floor(base + jitter);
 }
 
-// load
-function initialize() {
-    connect();
+function connect() {
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+    // Already connected or in progress
+    return ws;
+  }
+  if (reconnectTimer) {
+    // A reconnect is already scheduled
+    return ws;
+  }
+
+  const url = makeWsUrl();
+  console.log('Connecting to', url);
+  ws = new WebSocket(url);
+
+  ws.onopen = () => {
+    console.log("Connected to car data server");
+    reconnectAttempts = 0; // reset backoff
+  };
+
+  ws.onmessage = (event) => {
+    try {
+      const message = JSON.parse(event.data);
+      if (message.type === "car_update" && message.car) {
+        Object.assign(car, message.car);
+      }
+    } catch (err) {
+      console.error("Invalid JSON");
+    }
+  };
+
+  ws.onerror = (err) => {
+    // Log only; avoid explicit close() here to prevent double-close loops.
+    console.error("WebSocket error:", err);
+  };
+
+  ws.onclose = (evt) => {
+    console.warn(`WebSocket closed (code=${evt.code}, wasClean=${evt.wasClean}).`);
+    if (!shouldReconnect) return;
+
+    // Only schedule one reconnect
+    if (!reconnectTimer) {
+      reconnectAttempts++;
+      const delay = backoffDelay();
+      console.warn(`Reconnecting in ${delay}ms...`);
+      reconnectTimer = setTimeout(() => {
+        reconnectTimer = null;
+        connect();
+      }, delay);
+    }
+  };
+
+  return ws;
+}
+
+function disconnect() {
+  shouldReconnect = false;
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer);
+    reconnectTimer = null;
+  }
+  if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+    ws.close(1000, "Client closing");
+  }
+  ws = null;
+}
+
+function isConnected() {
+  return ws && ws.readyState === WebSocket.OPEN;
 }
 
 // function to set car variable - should be used only for testing
@@ -111,4 +160,4 @@ function fetch() {
     });
 }
 
-export const Car = { initialize, set, fetch };
+export const Car = { connect, disconnect, isConnected, set, fetch };

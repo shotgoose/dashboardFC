@@ -8,13 +8,16 @@ import { Icon } from './modules/ui/Icon.js';
 import { Meter } from './modules/ui/Meter.js';
 import { Message } from './modules/ui/Message.js';
 
+window.icon = Icon;
+
 
 window.prevTime = 0;
 
 function load() {
+    // connect to car data stream
+    Car.connect();
+
     // intialize modules
-    console.log("test");
-    Car.initialize();
     Model.initialize();
     Icon.initialize();
     Meter.initialize();

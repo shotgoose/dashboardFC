@@ -1,6 +1,7 @@
 # server.py
-import asyncio, json, random, time, threading
+import asyncio, json, threading
 import websockets
+from websockets.exceptions import ConnectionClosedOK, ConnectionClosedError
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from functools import partial
 
@@ -12,59 +13,70 @@ class NoCacheHandler(SimpleHTTPRequestHandler):
         super().end_headers()
 
 def start_http():
-    # serve from ./ui explicitly so CWD doesn’t matter
     handler = partial(NoCacheHandler, directory="ui")
     server = ThreadingHTTPServer(("0.0.0.0", 8000), handler)
     print("HTTP on http://localhost:8000 (serving ./ui, no-cache)")
     server.serve_forever()
 
-# fake sensor read
-def read_sensors():
-    return {
-        "rpm": 0,
-        "mph": 0,
-        "coolant_temp": 0,
-        "oil_pressure": 0,
-        "voltage": 0,
-        "fuel_level": 0,
-        "outside_temp": 0,
-        "mpg": 0,
-        "odometer": 0,
-        "trip": 0,
-        "range": 0,
-        "runtime": 0, # time engine has been on in seconds
-        "illumination": False,
-        "right_turn_signal": False,
-        "left_turn_signal": False,
-        "hazards": False,
-        "high_beam": False, 
-    }
-
 CLIENTS = set()
 
-async def ws_handler(ws):
+# ---- WebSocket handler (compatible with websockets old/new) ----
+# change this:
+# async def ws_handler(ws, path):
+
+# to this:
+async def ws_handler(ws, path=None):  # <-- compatible with both APIs
     CLIENTS.add(ws)
     try:
-        async for msg in ws:
-            pass  # ignore incoming messages for now
+        async for _ in ws:  # consume messages safely
+            pass
+    except Exception as e:
+        print("WS handler error:", repr(e))  # don't crash the process
     finally:
         CLIENTS.discard(ws)
 
+
+# ---- Broadcast loop; never crash ----
 async def broadcaster():
     while True:
-        data = {"type": "car_update", "car": read_sensors()}
-        if CLIENTS:
-            msg = json.dumps(data)
-            await asyncio.gather(*[c.send(msg) for c in list(CLIENTS) if c.open], return_exceptions=True)
-        await asyncio.sleep(0.05)  # 20 Hz
+        try:
+            data = {
+                "type": "car_update",
+                "car": {
+                    "rpm": 2123, "mph": 50, "coolant_temp": 0, "oil_pressure": 0,
+                    "voltage": 0, "fuel_level": 0, "outside_temp": 0, "mpg": 0,
+                    "odometer": 0, "trip": 0, "range": 0, "runtime": 0,
+                    "illumination": False, "right_turn_signal": False,
+                    "left_turn_signal": True, "hazards": False, "high_beam": False,
+                }
+            }
+            if CLIENTS:
+                msg = json.dumps(data)
+                dead = []
+                send_tasks = [c.send(msg) for c in list(CLIENTS) if getattr(c, "open", True)]
+                # send concurrently and filter failures
+                results = await asyncio.gather(*send_tasks, return_exceptions=True)
+                for c, r in zip(list(CLIENTS), results):
+                    if isinstance(r, Exception):
+                        dead.append(c)
+                for c in dead:
+                    CLIENTS.discard(c)
+            await asyncio.sleep(0.05)  # 20 Hz
+        except Exception as e:
+            # Log but keep the loop alive
+            print("Broadcast error:", repr(e))
+            await asyncio.sleep(0.5)
 
 async def main():
-    # start HTTP server in background thread
+    # HTTP server in a background thread
     threading.Thread(target=start_http, daemon=True).start()
-    # start websocket server
-    async with websockets.serve(ws_handler, "0.0.0.0", 8765):
+
+    # WebSocket server (set a ping interval to keep connections healthy)
+    # If your version supports kwargs, these are harmless; otherwise omit.
+    server = websockets.serve(ws_handler, "0.0.0.0", 8765, ping_interval=20, ping_timeout=20)
+    async with server:
         print("WebSocket running on ws://0.0.0.0:8765")
-        await broadcaster()
+        await broadcaster()  # run forever
 
 if __name__ == "__main__":
     asyncio.run(main())
