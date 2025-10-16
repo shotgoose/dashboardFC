@@ -40,10 +40,10 @@ async def broadcaster():
                 "type": "car_update",
                 "car": {
                     "rpm": 2123, "mph": 50, "coolant_temp": 0, "oil_pressure": 0,
-                    "voltage": 0, "fuel_level": 0, "outside_temp": 0, "mpg": 0,
+                    "voltage": 13.4, "fuel_level": 45, "outside_temp": 0, "mpg": 0,
                     "odometer": 0, "trip": 0, "range": 0, "runtime": 0,
                     "illumination": False, "right_turn_signal": False,
-                    "left_turn_signal": True, "hazards": False, "high_beam": False,
+                    "left_turn_signal": True, "hazards": False, "high_beam": True,
                 }
             }
             if CLIENTS:

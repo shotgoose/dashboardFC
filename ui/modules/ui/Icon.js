@@ -9,7 +9,6 @@ const indicator_L = {
     property: 'left_turn_signal',
     onurl: 'indicator_L_on.png',
     offurl: 'indicator_L_off.png',
-    state: false,
 }
 
 const indicator_R = {
@@ -17,7 +16,6 @@ const indicator_R = {
     property: 'right_turn_signal',
     onurl: 'indicator_R_on.png',
     offurl: 'indicator_R_off.png',
-    state: false,
 }
 
 const hazard = {
@@ -25,7 +23,6 @@ const hazard = {
     property: 'hazards',
     onurl: 'hazard_on.png',
     offurl: 'hazard_off.png',
-    state: false,
 }
 
 const highbeam = {
@@ -33,7 +30,6 @@ const highbeam = {
     property: 'high_beam',
     onurl: 'highbeam_on.png',
     offurl: 'highbeam_off.png',
-    state: false,
 }
 
 const icons = [indicator_L, indicator_R, hazard, highbeam];
