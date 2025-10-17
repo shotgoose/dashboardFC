@@ -17,7 +17,8 @@ const car = {
     right_turn_signal: false,
     left_turn_signal: false,
     hazards: false,
-    high_beam: false, 
+    high_beam: false,
+    roof_down: false,
 
     // reference values
     max_rpm: 8000,

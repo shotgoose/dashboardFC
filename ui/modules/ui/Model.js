@@ -2,6 +2,11 @@
 import * as THREE from '../../lib/three/three.module.js';
 import { GLTFLoader } from '../../lib/three/addons/loaders/GLTFLoader.js';
 
+import { Car } from '../Car.js';
+
+// fetch car
+const car = Car.fetch();
+
 // renderer
 const wrap = document.getElementById('stats-container');
 const canvas = document.getElementById('rx7-model');
@@ -120,8 +125,14 @@ function fitToWrap() {
     camera.updateProjectionMatrix();
 }
 
-// main loop
+// main loop: play animations and set states according to incoming data
 function update(dt) {
+    // set states
+    toggleHeadlights(car.illumination);
+    toggleRoof(car.roof_down);
+    toggleWindows(car.roof_down);
+    
+    // play animations
     if (mixer) mixer.update(dt);
 
     for (let i = 0; i < animations.length; i++) {
@@ -160,19 +171,7 @@ function toggleRoof(forceState) {
 }
 
 function toggleWindows(forceState) {
-    toggleAnimationState('headlightAction', forceState);
-}
-
-function fetchHeadlightsState() {
-    return headlightAnim.deployed;
-}
-
-function fetchRoofState() {
-    return roofAnim.deployed;
-}
-
-function fetchWindowsState() {
-    return windowAnim.deployed;
+    toggleAnimationState('windowAction', forceState);
 }
 
 // change state of animation
@@ -214,5 +213,4 @@ function findAnimation(name) {
     return null;
 }
 
-export const Model = { initialize, update, render, fitToWrap, toggleHeadlights, toggleRoof, 
-    toggleWindows, fetchHeadlightsState, fetchRoofState, fetchWindowsState };
+export const Model = { initialize, update, render, fitToWrap };

@@ -9,6 +9,7 @@ def data_export():
             "odometer": odometer(), "trip": trip(), "range": range(), "runtime": runtime(),
             "illumination": illumination(), "left_turn_signal": left_turn_signal(),
             "right_turn_signal": right_turn_signal(), "hazards": hazards(), "high_beam": high_beam(),
+            "roof_down": roof_down(),
         }
     }
     return data
@@ -62,4 +63,7 @@ def hazards():
     return False
 
 def high_beam():
+    return True
+
+def roof_down():
     return True
