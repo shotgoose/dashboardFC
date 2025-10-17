@@ -9,13 +9,13 @@ from functools import partial
 
 # import data from interpreter
 current_dir = os.getcwd()
-parent_dir = os.path.dirname(current_dir)
-interpreter_dir = os.path.join(parent_dir, "interpreter")
+interpreter_dir = os.path.join(current_dir, "interpreter")
+interpreter_path = os.path.join(interpreter_dir, "interpreter.py")
 
 if interpreter_dir not in sys.path:
     sys.path.append(interpreter_dir)
 
-from interpreter import data
+from interpreter import data_export
 
 class NoCacheHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -48,16 +48,7 @@ async def ws_handler(ws, path=None):  # <-- compatible with both APIs
 async def broadcaster():
     while True:
         try:
-            data = {
-                "type": "car_update",
-                "car": {
-                    "rpm": 2123, "mph": 50, "coolant_temp": 0, "oil_pressure": 0,
-                    "voltage": 13.4, "fuel_level": 45, "outside_temp": 0, "mpg": 0,
-                    "odometer": 0, "trip": 0, "range": 0, "runtime": 0,
-                    "illumination": False, "right_turn_signal": False,
-                    "left_turn_signal": True, "hazards": False, "high_beam": True,
-                }
-            }
+            data = data_export()
             if CLIENTS:
                 msg = json.dumps(data)
                 dead = []
