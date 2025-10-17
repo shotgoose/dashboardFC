@@ -7,7 +7,7 @@ from websockets.exceptions import ConnectionClosedOK, ConnectionClosedError
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from functools import partial
 
-# import data from interpreter
+# import data fetch function from interpreter
 current_dir = os.getcwd()
 interpreter_dir = os.path.join(current_dir, "interpreter")
 interpreter_path = os.path.join(interpreter_dir, "interpreter.py")

@@ -8,9 +8,6 @@ import { Icon } from './modules/ui/Icon.js';
 import { Meter } from './modules/ui/Meter.js';
 import { Message } from './modules/ui/Message.js';
 
-window.icon = Icon;
-
-
 window.prevTime = 0;
 
 function load() {
