@@ -8,8 +8,10 @@ from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from functools import partial
 
 # import data fetch function from interpreter
-current_dir = os.getcwd()
-interpreter_dir = os.path.join(current_dir, "data_collector")
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+
+interpreter_dir = os.path.join(parent_dir, "data_collector")
 interpreter_path = os.path.join(interpreter_dir, "data_collector.py")
 
 if interpreter_dir not in sys.path:

@@ -1,4 +1,4 @@
-# interpret and format sensor data 
+# format, send, and log sensor data
 import os, csv
 from datetime import datetime
 
