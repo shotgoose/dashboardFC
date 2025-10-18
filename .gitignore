@@ -1,0 +1,26 @@
+# Ignore all CSV log files
+*.csv
+
+# Optional: ignore log directory entirely
+logs/
+*.log
+
+# Python cache and temp files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+
+# Virtual environments
+.venv/
+env/
+venv/
+
+# OS-specific stuff
+.DS_Store
+Thumbs.db
+
+# IDE files (optional)
+.vscode/
+.idea/
