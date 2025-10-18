@@ -74,7 +74,7 @@ def log(data):
     }
     buffer.append(row)
 
-    # write when needed
+    # write every 50 lines
     if len(buffer) >= BUFFER_LIMIT:
         write()
 
@@ -84,7 +84,7 @@ def write():
         return
     try:
         newfile = need_header(full_path)
-        with open(full_path, "a", newline="", encoding="utf-8") as f:  # added encoding
+        with open(full_path, "a", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=COLUMNS)
             if newfile:
                 writer.writeheader()

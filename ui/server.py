@@ -33,18 +33,20 @@ def start_http():
 CLIENTS = set()
 
 # WebSocket Handler
-async def ws_handler(ws, path=None):  # <-- compatible with both APIs
+async def ws_handler(ws, path=None):
     CLIENTS.add(ws)
     try:
+        #consume messages safely
         async for _ in ws:  # consume messages safely
             pass
     except Exception as e:
-        print("WS handler error:", repr(e))  # don't crash the process
+        #print error but avoid crash
+        print("WS handler error:", repr(e))
     finally:
         CLIENTS.discard(ws)
 
 
-# Broadcast loop, avoid crashes at all costs
+# broadcast loop
 async def broadcaster():
     while True:
         try:
@@ -62,7 +64,7 @@ async def broadcaster():
                     CLIENTS.discard(c)
             await asyncio.sleep(1/60)  # 60 Hz
         except Exception as e:
-            # Log but keep the loop alive
+            # lot but keep loop alive
             print("Broadcast error:", repr(e))
             await asyncio.sleep(1/60)
 
@@ -70,11 +72,11 @@ async def main():
     # HTTP server in a background thread
     threading.Thread(target=start_http, daemon=True).start()
 
-    # WebSocket server (set a ping interval to keep connections healthy)
+    # WebSocket server with ping interval
     server = websockets.serve(ws_handler, "0.0.0.0", 8765, ping_interval=20, ping_timeout=20)
     async with server:
         print("WebSocket running on ws://0.0.0.0:8765")
-        await broadcaster()  # run forever
+        await broadcaster()
 
 if __name__ == "__main__":
     asyncio.run(main())

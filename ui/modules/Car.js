@@ -40,7 +40,7 @@ window.car = car;
 
 function makeWsUrl() {
     const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-    const host = location.hostname; // e.g., 'localhost'
+    const host = location.hostname; // 'localhost'
     const port = 8765;              // WS server port
     return `${proto}://${host}:${port}`;
 }
@@ -49,7 +49,7 @@ function makeWsUrl() {
 let ws = null;
 let reconnectTimer = null;
 let reconnectAttempts = 0;
-let shouldReconnect = true; // set to false if you intentionally call close()
+let shouldReconnect = true;
 
 const MIN_DELAY = 500;      // ms
 const MAX_DELAY = 10000;    // ms
