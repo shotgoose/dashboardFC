@@ -8,8 +8,7 @@ filename = "log_" + date_time + ".csv"
 
 # file path to log
 current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)
-log_dir = os.path.join(parent_dir, "logs")
+log_dir = os.path.join(current_dir, "logs")
 os.makedirs(log_dir, exist_ok=True)
 full_path = os.path.join(log_dir, filename)
 
