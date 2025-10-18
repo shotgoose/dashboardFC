@@ -9,8 +9,8 @@ from functools import partial
 
 # import data fetch function from interpreter
 current_dir = os.getcwd()
-interpreter_dir = os.path.join(current_dir, "interpreter")
-interpreter_path = os.path.join(interpreter_dir, "interpreter.py")
+interpreter_dir = os.path.join(current_dir, "data_collector")
+interpreter_path = os.path.join(interpreter_dir, "data_collector.py")
 
 if interpreter_dir not in sys.path:
     sys.path.append(interpreter_dir)
