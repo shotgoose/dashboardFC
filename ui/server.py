@@ -15,7 +15,7 @@ interpreter_path = os.path.join(interpreter_dir, "interpreter.py")
 if interpreter_dir not in sys.path:
     sys.path.append(interpreter_dir)
 
-from interpreter import data_export
+import interpreter
 
 class NoCacheHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -48,7 +48,7 @@ async def ws_handler(ws, path=None):  # <-- compatible with both APIs
 async def broadcaster():
     while True:
         try:
-            data = data_export()
+            data = interpreter.fetch()
             if CLIENTS:
                 msg = json.dumps(data)
                 dead = []
