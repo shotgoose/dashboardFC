@@ -1,1 +1,0 @@
-# should boot python server file and open chromium in kiosk mode to localhost:8000/dashboard.html

@@ -1,9 +1,5 @@
-# Ignore all CSV log files
-*.csv
-
-# Optional: ignore log directory entirely
+# Ignore log directory
 logs/
-*.log
 
 # Python cache and temp files
 __pycache__/
@@ -21,6 +17,6 @@ venv/
 .DS_Store
 Thumbs.db
 
-# IDE files (optional)
+# IDE files
 .vscode/
 .idea/

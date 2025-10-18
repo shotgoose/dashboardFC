@@ -1,0 +1,1 @@
+"""Minimal readiness check using TCP connect to host:port."""
