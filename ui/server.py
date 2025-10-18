@@ -17,7 +17,7 @@ interpreter_path = os.path.join(interpreter_dir, "data_collector.py")
 if interpreter_dir not in sys.path:
     sys.path.append(interpreter_dir)
 
-import interpreter
+import data_collector
 
 class NoCacheHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
@@ -52,7 +52,7 @@ async def ws_handler(ws, path=None):
 async def broadcaster():
     while True:
         try:
-            data = interpreter.fetch()
+            data = data_collector.collect()
             if CLIENTS:
                 msg = json.dumps(data)
                 dead = []

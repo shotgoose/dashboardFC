@@ -33,7 +33,7 @@ def need_header(path: str) -> bool:
     return (not os.path.exists(path)) or (os.path.getsize(path) == 0)
 
 # export car data
-def fetch():
+def collect():
     global fetch_count
     fetch_count += 1
     car = {
