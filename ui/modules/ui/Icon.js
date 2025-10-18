@@ -72,22 +72,4 @@ function update() {
     }
 }
 
-// // function to toggle icon
-// function toggleIcon(iconName, forceState) {
-//     let icon = findIcon(iconName);
-
-//     let state = typeof forceState === 'boolean' ? forceState : !icon.state;
-//     icon.state = state;
-// }
-
-// // find icon by name
-// function findIcon(name) {
-//     for (let i = 0; i < icons.length; i++) {
-//         if (icons[i].name == name) {
-//             return icons[i];
-//         }
-//     }
-//     return null;
-// }
-
 export const Icon = { initialize, update };

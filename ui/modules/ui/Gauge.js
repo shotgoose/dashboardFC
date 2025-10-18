@@ -233,15 +233,11 @@ function label(gauge) {
 
 }
 
-function update(dt) {
-
-}
-
-function render() {
+function update() {
     for (let i = 0; i < gauges.length; i++) {
         draw(gauges[i]);
     }
 }
 
-export const Gauge = { initialize, create, render };
+export const Gauge = { initialize, create, update };
 

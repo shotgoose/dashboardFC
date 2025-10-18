@@ -25,27 +25,20 @@ function loop(time) {
     var dt = time - window.prevTime;
     window.prevTime = time;
 
-    update(dt);
-    draw(dt);
-
-    requestAnimationFrame(loop);
-}
-
-function update(dt) {
     // ui module updates
     Model.update(dt / 1000);
+    Gauge.update();
     Icon.update();
     Message.update();
     Meter.update();
 
+    // render model
+    Model.render();
+
     // window resize
     window.addEventListener('resize', Model.fitToWrap);
-}
 
-function draw(dt) {
-    // draw visuals
-    Gauge.render();
-    Model.render();
+    requestAnimationFrame(loop);
 }
 
 load();
