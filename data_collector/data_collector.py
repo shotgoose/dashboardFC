@@ -97,10 +97,10 @@ def write():
 
 # sensor data fetch functions
 def rpm():
-    return 3242
+    return 6000
 
 def mph():
-    return 30
+    return 60
 
 def coolant_temp():
     return 86
@@ -130,10 +130,10 @@ def runtime():
     return 200
 
 def illumination():
-    return False
+    return True
 
 def left_turn_signal():
-    return False
+    return True
 
 def right_turn_signal():
     return False
@@ -145,4 +145,4 @@ def high_beam():
     return True
 
 def roof_down():
-    return True
+    return False
