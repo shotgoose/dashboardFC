@@ -97,10 +97,10 @@ def write():
 
 # sensor data fetch functions
 def rpm():
-    return 6000
+    return 3000
 
 def mph():
-    return 60
+    return 30
 
 def coolant_temp():
     return 86
