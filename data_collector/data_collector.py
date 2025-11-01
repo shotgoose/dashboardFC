@@ -96,8 +96,11 @@ def write():
         print(f"[log write error] {e}")
 
 # sensor data fetch functions
+index = 0
 def rpm():
-    return 6000
+    global index
+    index = index + 1
+    return index
 
 def mph():
     return 60

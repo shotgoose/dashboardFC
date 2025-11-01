@@ -88,7 +88,8 @@ function computePolys(gauge) {
 
     // initialize other constants
     const tickWidthRatio = gauge.tickWidthRatio;
-    const segments = Math.round(sweep * (180 / Math.PI));
+    const degrees = Math.round(sweep * (180 / Math.PI))
+    const segments = degrees * 4;
 
     // tick calculations
     const range = (gauge.maxVal - gauge.minVal);
@@ -100,8 +101,9 @@ function computePolys(gauge) {
     let outlinePath = ["0%50%"];
 
     // calculate outline path
-    for (let i = 0; i <= segments; i++) {
+    for (let i = 1; i <= segments; i++) {
         // establish point
+
         let pointAngle = startAngle + sweep * (i / segments);
 
         let x = (Math.cos(pointAngle) + 1) / 2;
@@ -128,22 +130,20 @@ function computePolys(gauge) {
 
     // calculate all bar paths
     let barPolys = [];
+    let barPath = ["50%50%", "0%50%"];
 
-    for (let p = 0; p <= segments; p++) {
-        // begin bar path
-        let barPath = ["50%50%", "0%50%"];
+    for (let i = 1; i <= segments; i++) {
+        // build off of established bar path
 
-        for (let i = 0; i <= segments; i++) {
-            // establish point 
-            let pointAngle = startAngle + sweep * (i / segments);
+        // establish point
+        let pointAngle = startAngle + sweep * (i / segments);
 
-            let x = (Math.cos(pointAngle) + 1) / 2;
-            let y = (Math.sin(pointAngle) + 1) / 2;
-            let str = ((x * 100) + "%") + ((y * 100) + "%");
+        let x = (Math.cos(pointAngle) + 1) / 2;
+        let y = (Math.sin(pointAngle) + 1) / 2;
+        let str = ((x * 100) + "%") + ((y * 100) + "%");
 
-            // push to bar path
-            if ((i / segments) <= (p / segments)) barPath.push(str);
-        }
+        // push to bar path
+        barPath.push(str);
 
         // store bar path
         const barPoly = "polygon(" + barPath.join(",") + ")";
@@ -174,7 +174,7 @@ function draw(gauge) {
     const sweep = Util.clockWiseDiff(startAngle, endAngle);
 
     // convert gauge percent to segment value
-    let segment = Math.round(gaugePercent * sweep * (180 / Math.PI));
+    let segment = Math.round(gaugePercent * sweep * (180 / Math.PI) * 4);
 
     // set polyons
     barImg.style.clipPath = gauge.barPolys[segment];
