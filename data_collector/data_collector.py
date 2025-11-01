@@ -98,12 +98,10 @@ def write():
 # sensor data fetch functions
 index = 0
 def rpm():
-    global index
-    index = index + 1
-    return index
+    return 3000
 
 def mph():
-    return 60
+    return 30
 
 def coolant_temp():
     return 86
