@@ -101,7 +101,12 @@ def rpm():
     return 3000
 
 def mph():
-    return 30
+    REVOLUTIONS_PER_MILE = 1025
+    MINUTES_PER_HOUR = 60
+
+    input_rpm = 1000
+
+    return input_rpm * MINUTES_PER_HOUR / REVOLUTIONS_PER_MILE
 
 def coolant_temp():
     return 86
